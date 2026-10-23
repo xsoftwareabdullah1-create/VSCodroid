@@ -303,6 +303,7 @@ Quick links:
 | [Development Guide](docs/09-DEVELOPMENT_GUIDE.md)                            | Pointer to CONTRIBUTING.md, which carries the build and contribution steps |
 | [Release Plan](docs/10-RELEASE_PLAN.md)                                      | Release strategy, CI/CD, Play Store                        |
 | [User Guide](docs/USER_GUIDE.md)                                             | How to use VSCodroid (keyboard, terminal, extensions, debugging, SSH) |
+| [Language Toolchains and Extensions](docs/LANGUAGE_TOOLS.md) | How to install runtimes/compilers and VS Code language extensions from Open VSX |
 | [Milestones](MILESTONES.md)                                                  | Development milestones M0-M6                               |
 | [Glossary](docs/11-GLOSSARY.md)                                              | Terms and definitions                                      |
 | [Implementation Plan](docs/12-IMPLEMENTATION_PLAN.md)                        | Week-by-week task breakdown with dependencies              |
