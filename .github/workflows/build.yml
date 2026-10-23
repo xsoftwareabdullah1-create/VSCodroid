@@ -404,16 +404,21 @@ jobs:
           test -s "$APK"
           APP_ID="$(apkanalyzer manifest application-id "$APK")"
           MIN_SDK="$(apkanalyzer manifest min-sdk "$APK")"
-          APP_LABEL="$(apkanalyzer manifest application-label "$APK")"
+          # apkanalyzer's application-label can be empty on some SDK tool versions.
+          # Read the packaged APK's resolved label using aapt, which is installed
+          # by setup-android alongside the Android build tools.
+          APK_BADGING="$(aapt dump badging "$APK")"
+          APP_LABEL="$(printf '%s\n' "$APK_BADGING" | sed -n "s/^application-label:'\\(.*\\)'$/\\1/p" | head -n 1)"
           echo "Application ID: $APP_ID"
-          echo "App label: $APP_LABEL"
+          echo "App label: ${APP_LABEL:-<unresolved>}"
           echo "Minimum Android API: $MIN_SDK"
           if [ "$APP_ID" != "com.vscodroid.debug" ]; then
             echo "::error::Unexpected debug application ID: $APP_ID"
             exit 1
           fi
           if [ "$APP_LABEL" != "VSCodroid" ]; then
-            echo "::error::APK label is not VSCodroid: $APP_LABEL"
+            echo "::error::APK label is not VSCodroid. Resolved label: ${APP_LABEL:-<empty>}"
+            printf '%s\n' "$APK_BADGING" | grep -E '^(package:|application-label)' || true
             exit 1
           fi
           if [ "$MIN_SDK" -gt 24 ]; then
