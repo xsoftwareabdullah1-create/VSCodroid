@@ -37,8 +37,8 @@ Ruby, Java, and C/C++ require their corresponding optional toolchain to be insta
 
 VSCodroid's editor uses the VS Code Extensions view, with Open VSX as the extension registry.
 
-1. Open the editor.
-2. Press `Ctrl+Shift+X` to open **Extensions**. On a touch screen, open the Command Palette with `Ctrl+Shift+P` and search for **Extensions: Focus on Extensions View**, or tap the Extensions icon in the activity bar if it is visible.
+1. Open the editor. For a direct language-only search, open the Command Palette (`Ctrl+Shift+P`) and run **VSCodroid: Language Marketplace**. It opens the Extensions view filtered to the Programming Languages category.
+2. Alternatively, press `Ctrl+Shift+X` to open **Extensions**. On a touch screen, open the Command Palette with `Ctrl+Shift+P` and search for **Extensions: Focus on Extensions View**, or tap the Extensions icon in the activity bar if it is visible.
 3. Search for the language or tool you need (for example, Python, Java, C/C++, ESLint, or Prettier).
 4. Open the result and choose **Install**. Follow any extension-specific setup instructions.
 
