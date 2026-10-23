@@ -200,6 +200,19 @@ function activate(context) {
         '.vscodroid_welcome_shown'
     );
 
+    // Opens the built-in Open VSX extension view and filters it to language
+    // extensions. The marketplace itself is configured by server.js; this
+    // command gives mobile users a direct route to language packs and tooling.
+    context.subscriptions.push(
+        vscode.commands.registerCommand('vscodroid.languageMarketplace', async () => {
+            await vscode.commands.executeCommand('workbench.view.extensions');
+            return vscode.commands.executeCommand(
+                'workbench.extensions.search',
+                '@category:"Programming Languages"'
+            );
+        })
+    );
+
     // Command to open the walkthrough manually (from Command Palette)
     context.subscriptions.push(
         vscode.commands.registerCommand('vscodroid.welcome.open', () => {
