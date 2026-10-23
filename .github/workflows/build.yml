@@ -396,11 +396,38 @@ jobs:
         working-directory: android
         run: ./gradlew assembleDebug
 
-      - name: Upload debug APK
+      - name: Verify APK package, Android requirement, and branding
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK="android/app/build/outputs/apk/debug/app-debug.apk"
+          test -s "$APK"
+          APP_ID="$(apkanalyzer manifest application-id "$APK")"
+          MIN_SDK="$(apkanalyzer manifest min-sdk "$APK")"
+          APP_LABEL="$(apkanalyzer manifest application-label "$APK")"
+          echo "Application ID: $APP_ID"
+          echo "App label: $APP_LABEL"
+          echo "Minimum Android API: $MIN_SDK"
+          if [ "$APP_ID" != "com.vscodroid.debug" ]; then
+            echo "::error::Unexpected debug application ID: $APP_ID"
+            exit 1
+          fi
+          if [ "$APP_LABEL" != "VSCodroid" ]; then
+            echo "::error::APK label is not VSCodroid: $APP_LABEL"
+            exit 1
+          fi
+          if [ "$MIN_SDK" -gt 24 ]; then
+            echo "::warning::This APK cannot install on Android 7 (API 24); its minimum SDK is $MIN_SDK."
+          fi
+          mkdir -p dist
+          cp "$APK" dist/VSCodroid-debug.apk
+
+      - name: Upload VSCodroid APK
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: debug-apk
-          path: android/app/build/outputs/apk/debug/*.apk
+          name: VSCodroid-debug-APK
+          path: dist/VSCodroid-debug.apk
+          if-no-files-found: error
           retention-days: 14
 
   test:
