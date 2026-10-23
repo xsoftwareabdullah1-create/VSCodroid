@@ -46,9 +46,26 @@ Extensions can provide syntax highlighting, completion, diagnostics, formatting,
 
 Open VSX is a separate registry, so not every extension from Microsoft's Visual Studio Marketplace is available there. Extension downloads require internet access. Some extensions may not support this app's bundled VS Code version or Android/ARM64 environment; check compatibility before relying on them.
 
-## Android 7 (API 24) note
+## Language coverage
 
-The app's minimum SDK setting is API 24, but that setting alone does not prove every bundled native binary, extension, or language server works on Android 7. Native toolchains and extensions can have their own Android, ABI, or VS Code-version requirements. Treat a language as supported on Android 7 only after installing it and testing a real compile/run and editor diagnostics on an Android 7 device or emulator.
+VSCodroid uses the VS Code editor and Open VSX extensions, so its language coverage is extensible rather than limited to a fixed list. The base editor provides editing and syntax highlighting for many common formats; install a language extension when you need richer completion, diagnostics, formatting, or debugging.
+
+| Language / format | Editor support and what is needed to run it |
+| --- | --- |
+| JavaScript, TypeScript, HTML, CSS, JSON, Markdown | Core editing support; Node.js is bundled for JavaScript execution. TypeScript can use the bundled Node.js runtime, while project-specific packages may need installing. |
+| Python | Python 3 is bundled. Install the Python extension from Open VSX for richer language features. |
+| Java | Install the optional Java 21 toolchain and a compatible Java extension. |
+| C and C++ | Install the optional C/C++ toolchain. Use a compatible extension for language-server features. |
+| Ruby | Install the optional Ruby toolchain and a compatible Ruby extension. |
+| PHP, Go, Rust, C#, Kotlin, Dart/Flutter, Swift, SQL, YAML, XML, Shell/Bash, Dockerfiles and other formats | Search Open VSX for a compatible language extension. A syntax extension does not itself install a compiler, SDK, debugger, or runtime; those must be installed separately and may not be available or usable on Android/ARM64. |
+
+This is broad language-editor support, **not a promise that every programming language has a working on-device compiler**. Some ecosystems (for example, .NET, Flutter, Android SDK builds, Swift, or Rust targets) need large SDKs, unsupported native components, or platform-specific setup. Check the extension's VS Code engine requirement and Android/ARM64 support before relying on it.
+
+## Android 8.0 / 8.1 compatibility
+
+Android 8.0 is API 26 and Android 8.1 is API 27. The app's current minimum SDK is API 24, so both versions are within the declared range. Android 8.x compatibility still depends on the bundled VS Code server, native ARM64 binaries, WebView provider, and any installed extensions/toolchains. The app should be verified on API 26 and API 27 devices or emulators before calling those versions fully tested.
+
+The app's minimum SDK setting alone does not prove every bundled native binary, extension, or language server works on Android 8.x. Treat a language as supported for compile/run and diagnostics only after installing it and testing those features on the target Android version.
 
 ## Troubleshooting
 
