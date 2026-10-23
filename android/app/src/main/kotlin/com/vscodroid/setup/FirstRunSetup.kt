@@ -4048,11 +4048,16 @@ claude() {
 
     private fun getCurrentVersionCode(): Int {
         return try {
-            // longVersionCode unconditionally: it arrived in API 28 and minSdk
-            // here is 30, so the deprecated field the old branch fell back to was
-            // unreachable.
-            context.packageManager.getPackageInfo(context.packageName, 0)
-                .longVersionCode.toInt()
+            // PackageInfo.longVersionCode was added in API 28. Calling it on
+            // Android 7/8 causes NoSuchMethodError, which is not caught by
+            // Exception. Use the legacy versionCode field on older Android.
+            val packageInfo = context.packageManager.getPackageInfo(context.packageName, 0)
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.P) {
+                packageInfo.longVersionCode.toInt()
+            } else {
+                @Suppress("DEPRECATION")
+                packageInfo.versionCode
+            }
         } catch (e: Exception) {
             0
         }
