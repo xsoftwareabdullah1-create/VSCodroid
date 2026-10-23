@@ -94,7 +94,7 @@ class ExecTrampolineOnDeviceTest {
      * absolute path. It must not start.
      */
     @Test
-    fun `a payload under filesDir cannot be executed directly`() {
+    fun a_payload_under_filesDir_cannot_be_executed_directly() {
         val result = run(listOf(payload.absolutePath, "--version"), emptyMap())
 
         assertNotEquals(
@@ -110,7 +110,7 @@ class ExecTrampolineOnDeviceTest {
      * through a PATH holding only the trampoline directory.
      */
     @Test
-    fun `the trampoline runs the same payload by bare name`() {
+    fun the_trampoline_runs_the_same_payload_by_bare_name() {
         val result = runByName(
             "make --version",
             mapOf(
@@ -141,7 +141,7 @@ class ExecTrampolineOnDeviceTest {
      * what it was handed.
      */
     @Test
-    fun `a variable in the table reaches the program the trampoline starts`() {
+    fun a_variable_in_the_table_reaches_the_program_the_trampoline_starts() {
         val probe = File(probeRoot, "probe.mk").apply {
             writeText("\$(info probe=\$(VSCODROID_PROBE))\nall: ;\n")
         }
@@ -169,7 +169,7 @@ class ExecTrampolineOnDeviceTest {
      * caller was never given rather than overriding what it chose.
      */
     @Test
-    fun `a variable the caller already has is not overwritten`() {
+    fun a_variable_the_caller_already_has_is_not_overwritten() {
         val probe = File(probeRoot, "probe.mk").apply {
             writeText("\$(info probe=\$(VSCODROID_PROBE))\nall: ;\n")
         }
@@ -196,7 +196,7 @@ class ExecTrampolineOnDeviceTest {
      * else happens to be reachable. The trampoline must never search PATH.
      */
     @Test
-    fun `a name with no row fails with a reason`() {
+    fun a_name_with_no_row_fails_with_a_reason() {
         Runtime.getRuntime().exec(
             arrayOf("/system/bin/ln", "-sf", trampoline.absolutePath, File(tcBin, "nosuch").absolutePath)
         ).waitFor()
