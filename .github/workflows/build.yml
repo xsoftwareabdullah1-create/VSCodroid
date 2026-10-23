@@ -407,7 +407,17 @@ jobs:
           # apkanalyzer's application-label can be empty on some SDK tool versions.
           # Read the packaged APK's resolved label using aapt, which is installed
           # by setup-android alongside the Android build tools.
-          APK_BADGING="$(aapt dump badging "$APK")"
+          SDK_ROOT="${ANDROID_HOME:-${ANDROID_SDK_ROOT:-}}" 
+          if [ -z "$SDK_ROOT" ] || [ ! -d "$SDK_ROOT/build-tools" ]; then
+            echo "::error::Android SDK build-tools directory was not found."
+            exit 1
+          fi
+          AAPT="$(find "$SDK_ROOT/build-tools" -type f -name aapt -print | sort -V | tail -n 1)"
+          if [ -z "$AAPT" ]; then
+            echo "::error::aapt was not found under $SDK_ROOT/build-tools."
+            exit 1
+          fi
+          APK_BADGING="$("$AAPT" dump badging "$APK")"
           APP_LABEL="$(printf '%s\n' "$APK_BADGING" | sed -n "s/^application-label:'\\(.*\\)'$/\\1/p" | head -n 1)"
           echo "Application ID: $APP_ID"
           echo "App label: ${APP_LABEL:-<unresolved>}"
