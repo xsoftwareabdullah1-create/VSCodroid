@@ -46,6 +46,11 @@ class VSCodroidApp : Application() {
     }
 
     private fun createNotificationChannel() {
+        // Notification channels were introduced in Android 8.0 (API 26).
+        // Keep the app launchable on API 24/25 too; older Android versions use
+        // notification defaults and must not resolve this API at runtime.
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.O) return
+
         val channel = NotificationChannel(
             NOTIFICATION_CHANNEL_ID,
             getString(R.string.notification_channel_name),
