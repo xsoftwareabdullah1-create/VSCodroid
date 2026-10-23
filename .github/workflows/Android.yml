@@ -1,0 +1,59 @@
+
+name: Android APK Build
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platforms;android-36 build-tools;36.0.0'
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Grant Gradle permission
+        run: |
+          if [ -f gradlew ]; then
+            chmod +x gradlew
+          fi
+
+      - name: Build APK
+        run: |
+          if [ -f gradlew ]; then
+            ./gradlew --no-daemon assembleDebug
+          elif [ -f build.gradle ] || [ -f build.gradle.kts ]; then
+            gradle --no-daemon assembleDebug
+          else
+            echo "Gradle Android project not found at repository root."
+            exit 1
+          fi
+
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: Android-APK
+          path: |
+            **/build/outputs/apk/**/*.apk
+          if-no-files-found: error
+          retention-days: 14
