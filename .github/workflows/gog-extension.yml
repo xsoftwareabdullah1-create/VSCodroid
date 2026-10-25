@@ -1,0 +1,74 @@
+name: GOG Extension CI
+
+on:
+  push:
+    branches: [main, add-gog-language-extension]
+    paths:
+      - "extensions/gog-language/**"
+      - ".github/workflows/gog-extension.yml"
+  pull_request:
+    paths:
+      - "extensions/gog-language/**"
+      - ".github/workflows/gog-extension.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: gog-extension-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-and-package:
+    name: Validate and package GOG extension
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: extensions/gog-language/package.json
+
+      - name: Validate extension JSON
+        working-directory: extensions/gog-language
+        run: |
+          node -e "JSON.parse(require('fs').readFileSync('package.json', 'utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('language-configuration.json', 'utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('syntaxes/gog.tmLanguage.json', 'utf8'))"
+          node -e "JSON.parse(require('fs').readFileSync('snippets/gog.json', 'utf8'))"
+
+      - name: Check manifest requirements
+        working-directory: extensions/gog-language
+        run: |
+          node <<'NODE'
+          const p = require('./package.json');
+          const fs = require('fs');
+          if (!p.name || !p.publisher || !p.version || !p.engines?.vscode) {
+            throw new Error('Required extension manifest fields are missing');
+          }
+          if (!p.contributes?.languages?.some(x => x.extensions?.includes('.gog'))) {
+            throw new Error('The .gog language extension is not registered');
+          }
+          for (const file of ['README.md', 'language-configuration.json', 'syntaxes/gog.tmLanguage.json', 'snippets/gog.json']) {
+            if (!fs.existsSync(file)) throw new Error('Missing required file: ' + file);
+          }
+          console.log('Manifest and required files look valid.');
+          NODE
+
+      - name: Package VSIX
+        working-directory: extensions/gog-language
+        run: npx --yes @vscode/vsce package --no-dependencies
+
+      - name: Upload VSIX artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: GOG-Language-Support-VSIX
+          path: extensions/gog-language/*.vsix
+          if-no-files-found: error
+          retention-days: 14
