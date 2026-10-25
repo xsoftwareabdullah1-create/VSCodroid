@@ -1,0 +1,59 @@
+{
+  "name": "gog-language",
+  "displayName": "GOG Language Support",
+  "description": "Syntax highlighting and beginner-friendly snippets for the GOG programming language (.gog).",
+  "version": "0.1.0",
+  "publisher": "xsoftwareabdullah1-create",
+  "license": "MIT",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Snippets"
+  ],
+  "keywords": [
+    "gog",
+    "language",
+    "syntax",
+    "snippets",
+    "beginner"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/xsoftwareabdullah1-create/VSCodroid.git"
+  },
+  "homepage": "https://github.com/xsoftwareabdullah1-create/VSCodroid/tree/main/extensions/gog-language",
+  "bugs": {
+    "url": "https://github.com/xsoftwareabdullah1-create/VSCodroid/issues"
+  },
+  "pricing": "Free",
+  "contributes": {
+    "languages": [
+      {
+        "id": "gog",
+        "aliases": [
+          "GOG",
+          "gog"
+        ],
+        "extensions": [
+          ".gog"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "grammars": [
+      {
+        "language": "gog",
+        "scopeName": "source.gog",
+        "path": "./syntaxes/gog.tmLanguage.json"
+      }
+    ],
+    "snippets": [
+      {
+        "language": "gog",
+        "path": "./snippets/gog.json"
+      }
+    ]
+  }
+}
