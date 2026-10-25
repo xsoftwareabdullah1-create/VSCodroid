@@ -1,0 +1,67 @@
+{
+  "$schema": "https://raw.githubusercontent.com/martinring/tmlanguage/master/tmlanguage.json",
+  "name": "GOG",
+  "scopeName": "source.gog",
+  "patterns": [
+    {
+      "include": "#comments"
+    },
+    {
+      "include": "#strings"
+    },
+    {
+      "include": "#numbers"
+    },
+    {
+      "include": "#keywords"
+    },
+    {
+      "include": "#builtins"
+    },
+    {
+      "include": "#functions"
+    }
+  ],
+  "repository": {
+    "comments": {
+      "patterns": [
+        {
+          "name": "comment.line.double-slash.gog",
+          "match": "//.*$"
+        },
+        {
+          "name": "comment.block.gog",
+          "begin": "/\\*",
+          "end": "\\*/"
+        }
+      ]
+    },
+    "strings": {
+      "name": "string.quoted.double.gog",
+      "begin": "\"",
+      "end": "\"",
+      "patterns": [
+        {
+          "name": "constant.character.escape.gog",
+          "match": "\\\\."
+        }
+      ]
+    },
+    "numbers": {
+      "name": "constant.numeric.gog",
+      "match": "\\b\\d+(?:\\.\\d+)?\\b"
+    },
+    "keywords": {
+      "name": "keyword.control.gog",
+      "match": "\\b(?:Window|If|Else|Repeat|While|For|Function|Return|True|False|And|Or|Not)\\b"
+    },
+    "builtins": {
+      "name": "support.function.builtin.gog",
+      "match": "\\b(?:show|ShowHeading|Background|Text|Button|Image|Input|CreateWorld|CreatePlayer|AddCamera|AddLight|AI|Learn|Answer)\\b(?=\\s*\\()"
+    },
+    "functions": {
+      "name": "entity.name.function.gog",
+      "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*(?=\\s*\\()"
+    }
+  }
+}
