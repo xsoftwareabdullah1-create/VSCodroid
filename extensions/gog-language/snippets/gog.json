@@ -1,0 +1,51 @@
+{
+  "Print output": {
+    "prefix": "show",
+    "body": [
+      "show(\"${1:Hello World!}\")"
+    ],
+    "description": "Print a message"
+  },
+  "Window UI": {
+    "prefix": "window",
+    "body": [
+      "Window(\"${1:My App}\") {",
+      "    Background(\"${2:Light Blue}\")",
+      "    ShowHeading(\"${3:Welcome!}\")",
+      "    $0",
+      "}"
+    ],
+    "description": "Create a window with a named background colour and heading"
+  },
+  "Button": {
+    "prefix": "button",
+    "body": [
+      "Button(\"${1:Click Me}\") {",
+      "    show(\"${2:Button Clicked!}\")",
+      "}"
+    ],
+    "description": "Create a button with an action"
+  },
+  "3D game starter": {
+    "prefix": "game3d",
+    "body": [
+      "Game3D(\"${1:My World}\") {",
+      "    CreateWorld()",
+      "    CreatePlayer(\"${2:Hero}\")",
+      "    AddCamera()",
+      "    AddLight()",
+      "}"
+    ],
+    "description": "Draft a 3D game structure (runtime support is not included yet)"
+  },
+  "AI starter": {
+    "prefix": "ai",
+    "body": [
+      "AI(\"${1:My AI}\") {",
+      "    Learn(\"${2:data.txt}\")",
+      "    Answer(\"${3:Hello}\")",
+      "}"
+    ],
+    "description": "Draft an AI structure (runtime support is not included yet)"
+  }
+}
